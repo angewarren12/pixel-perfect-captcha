@@ -8,30 +8,45 @@ import { Button } from '@/components/ui/button';
 
 const CaptchaPage = () => {
   const captchaItems = ['Tortue', 'Café', 'Oiseau', 'Lion', 'Chat', 'Chaussure'];
-  const [selectedItem, setSelectedItem] = useState<string>('Tortue');
-  const [selectedImages, setSelectedImages] = useState<number[]>([]);
+  const [completedItems, setCompletedItems] = useState<string[]>([]);
+  const [validatedImages, setValidatedImages] = useState<number[]>([]);
 
-  const handleItemSelect = (item: string) => {
-    setSelectedItem(item);
+  const currentItem = captchaItems.find(item => !completedItems.includes(item)) || '';
+  const isCompleted = completedItems.length === captchaItems.length;
+
+  // Mapping des items aux images dans la grille
+  const itemToImageIndex: { [key: string]: number } = {
+    'Chaussure': 0,
+    'Tortue': 1,
+    'Vélo': 2,
+    'Lion': 3,
+    'Chat': 4,
+    'Oiseau': 5,
+    'Café': 6,
+    'Fleur': 7,
+    'Voiture': 8,
   };
 
   const handleImageClick = (index: number) => {
-    setSelectedImages(prev => {
-      if (prev.includes(index)) {
-        return prev.filter(i => i !== index);
-      }
-      return [...prev, index];
-    });
+    if (isCompleted || validatedImages.includes(index)) return;
+    
+    // Vérifier si l'image correspond à l'item actuel
+    const expectedIndex = itemToImageIndex[currentItem];
+    if (index === expectedIndex) {
+      setValidatedImages(prev => [...prev, index]);
+      setCompletedItems(prev => [...prev, currentItem]);
+    }
   };
 
   const handleNewGame = () => {
-    setSelectedImages([]);
-    setSelectedItem('Tortue');
+    setCompletedItems([]);
+    setValidatedImages([]);
   };
 
   const handleContinue = () => {
-    // Logic for validation would go here
-    console.log('Continuing with selected images:', selectedImages);
+    if (isCompleted) {
+      console.log('Captcha completed successfully!');
+    }
   };
 
   return (
@@ -55,15 +70,15 @@ const CaptchaPage = () => {
           <div className="order-2 md:order-1">
             <CaptchaSelector
               items={captchaItems}
-              selectedItem={selectedItem}
-              onItemSelect={handleItemSelect}
+              currentItem={currentItem}
+              completedItems={completedItems}
             />
           </div>
 
           <div className="order-1 md:order-2 space-y-6">
             <CaptchaGrid
               onImageClick={handleImageClick}
-              selectedImages={selectedImages}
+              validatedImages={validatedImages}
             />
             
             <div className="flex justify-center">
@@ -84,6 +99,7 @@ const CaptchaPage = () => {
             variant="orange"
             size="lg"
             onClick={handleContinue}
+            disabled={!isCompleted}
             className="px-8 py-3"
           >
             Continuer

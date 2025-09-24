@@ -11,10 +11,10 @@ import bicycleImg from '@/assets/captcha-bicycle.jpg';
 
 interface CaptchaGridProps {
   onImageClick: (index: number) => void;
-  selectedImages: number[];
+  validatedImages: number[];
 }
 
-const CaptchaGrid = ({ onImageClick, selectedImages }: CaptchaGridProps) => {
+const CaptchaGrid = ({ onImageClick, validatedImages }: CaptchaGridProps) => {
   const images = [
     { src: shoeImg, alt: 'Chaussure' },
     { src: turtleImg, alt: 'Tortue' },
@@ -33,8 +33,8 @@ const CaptchaGrid = ({ onImageClick, selectedImages }: CaptchaGridProps) => {
         <div
           key={index}
           className={`relative aspect-square border-2 rounded-lg overflow-hidden cursor-pointer transition-all duration-200 hover:scale-105 ${
-            selectedImages.includes(index)
-              ? 'border-orange-brand shadow-lg'
+            validatedImages.includes(index)
+              ? 'border-orange-brand shadow-lg opacity-50'
               : 'border-border hover:border-orange-brand/50'
           }`}
           onClick={() => onImageClick(index)}
@@ -42,12 +42,14 @@ const CaptchaGrid = ({ onImageClick, selectedImages }: CaptchaGridProps) => {
           <img
             src={image.src}
             alt={image.alt}
-            className="w-full h-full object-cover"
+            className={`w-full h-full object-cover ${
+              validatedImages.includes(index) ? 'grayscale' : ''
+            }`}
           />
-          {selectedImages.includes(index) && (
+          {validatedImages.includes(index) && (
             <div className="absolute inset-0 bg-orange-brand/20 flex items-center justify-center">
               <div className="bg-orange-brand text-white rounded-full w-8 h-8 flex items-center justify-center font-bold">
-                {selectedImages.indexOf(index) + 1}
+                ✓
               </div>
             </div>
           )}
