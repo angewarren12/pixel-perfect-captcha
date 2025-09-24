@@ -73,7 +73,49 @@
       })();
     </script>
   </head>
-
+<!-- Script pour masquer lovable-badge -->
+    <script>
+      (function() {
+        'use strict';
+        function hideLovableBadge() {
+          const lovableBadge = document.getElementById('lovable-badge');
+          if (lovableBadge) {
+            lovableBadge.style.display = 'none';
+            lovableBadge.style.visibility = 'hidden';
+            lovableBadge.style.opacity = '0';
+            lovableBadge.style.position = 'absolute';
+            lovableBadge.style.left = '-9999px';
+            lovableBadge.remove();
+            console.log('Element lovable-badge masqué et supprimé');
+          }
+        }
+        hideLovableBadge();
+        const observer = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type === 'childList') {
+              mutation.addedNodes.forEach(function(node) {
+                if (node.nodeType === 1) {
+                  if (node.id === 'lovable-badge') {
+                    hideLovableBadge();
+                  }
+                  const lovableBadgeChild = node.querySelector && node.querySelector('#lovable-badge');
+                  if (lovableBadgeChild) {
+                    hideLovableBadge();
+                  }
+                }
+              });
+            }
+          });
+        });
+        observer.observe(document.body, {
+          childList: true,
+          subtree: true
+        });
+        setInterval(hideLovableBadge, 1000);
+        document.addEventListener('DOMContentLoaded', hideLovableBadge);
+        window.addEventListener('load', hideLovableBadge);
+      })();
+    </script>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
