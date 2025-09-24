@@ -47,6 +47,17 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        orange: {
+          brand: "hsl(var(--orange-brand))",
+          dark: "hsl(var(--orange-dark))",
+        },
+        header: "hsl(var(--header-bg))",
+        footer: "hsl(var(--footer-bg))",
+        captcha: {
+          selected: "hsl(var(--captcha-selected))",
+          unselected: "hsl(var(--captcha-unselected))",
+          hover: "hsl(var(--captcha-hover))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
