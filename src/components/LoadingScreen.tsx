@@ -16,48 +16,32 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
           setTimeout(() => onComplete(), 500);
           return 100;
         }
-        return prev + 2;
+        return prev + 5; // Plus rapide pour éviter les timeouts
       });
-    }, 50);
+    }, 100); // Intervalle plus long pour éviter les problèmes
 
     return () => clearInterval(interval);
   }, [onComplete]);
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center">
-      <div className="text-center">
-        {/* Logo Orange animé */}
-        <div className="mb-8">
-          <img 
-            src={logoOrange} 
-            alt="Orange" 
-            className="h-16 w-auto mx-auto animate-pulse"
-          />
+    <div className="min-h-screen bg-white flex flex-col items-center justify-center p-4">
+      <div className="text-center mb-8">
+        <img
+          src={logoOrange}
+          alt="Orange"
+          className="h-20 w-auto mx-auto mb-6 animate-pulse"
+        />
+        <h1 className="text-2xl font-bold text-black mb-4">Vérification en cours...</h1>
+        <div className="w-64 bg-gray-200 rounded-full h-2.5 mx-auto">
+          <div
+            className="bg-orange-500 h-2.5 rounded-full transition-all duration-100 ease-linear"
+            style={{ width: `${progress}%` }}
+          ></div>
         </div>
-
-        {/* Texte de chargement */}
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">
-          Vérification en cours...
-        </h2>
-
-        {/* Barre de progression */}
-        <div className="w-64 mx-auto">
-          <div className="bg-gray-200 rounded-full h-2 overflow-hidden">
-            <div 
-              className="bg-orange-500 h-2 rounded-full transition-all duration-100 ease-out"
-              style={{ width: `${progress}%` }}
-            ></div>
-          </div>
-          <p className="text-sm text-gray-600 mt-2">
-            {progress}% terminé
-          </p>
-        </div>
-
-        {/* Animation de points */}
-        <div className="flex justify-center mt-6 space-x-1">
-          <div className="w-2 h-2 bg-orange-500 rounded-full animate-bounce"></div>
-          <div className="w-2 h-2 bg-orange-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-          <div className="w-2 h-2 bg-orange-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+        <div className="flex justify-center mt-4 space-x-2">
+          <div className="w-3 h-3 bg-orange-500 rounded-full animate-bounce" style={{ animationDelay: '0s' }}></div>
+          <div className="w-3 h-3 bg-orange-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+          <div className="w-3 h-3 bg-orange-500 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
         </div>
       </div>
     </div>
