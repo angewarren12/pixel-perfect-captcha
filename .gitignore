@@ -33,6 +33,12 @@ dist-ssr
 # Netlify
 .netlify
 
+# Firebase
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+
 # Build artifacts
 build/
 coverage/
